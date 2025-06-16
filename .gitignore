@@ -1,0 +1,35 @@
+# 🐍 Python cache and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# 📦 Virtual environment
+venv/
+env/
+
+# 🔑 Environment variables
+.env
+
+# 🧪 Test artifacts
+*.log
+*.pytest_cache/
+coverage.xml
+htmlcov/
+
+# 📚 IDE/editor files
+.vscode/
+.idea/
+*.swp
+
+# 💻 macOS files
+.DS_Store
+
+# 📂 Build artifacts
+build/
+dist/
+*.egg-info/
+
+# 🔒 Secrets (optional patterns)
+*.pem
+*.key
