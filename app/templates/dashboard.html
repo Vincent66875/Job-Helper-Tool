@@ -1,0 +1,36 @@
+<!-- list jobs -->
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Dashboard</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+ </head>
+ <body>
+    <h1> Job Application Tracker </h1>
+    <form action="/jobs/add" method="post">
+        <input type="text" name="title" placeholder="Job Title" required />
+        <input type="text" name="company" placeholder="Company" required />
+        <select name="status">
+            <option value="Applied">Applied</option>
+            <option value="Interviewing">Interviewing</option>
+            <option value="Offer">Offer</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+    </form>
+
+    <hr/>
+
+    <h2>Your Jobs</h2>
+    <ul>
+        {% for job in jobs %%}
+            <li>
+                <strong>{{ job.title }}</strong> at {{ job.company }} - Status: {{ job.status }}
+            </li>
+        {% else %}
+            <li>No jobs yet. Add one above!</li>
+        {% endfor %}
+    </ul>
+ </body>
+ </html>
