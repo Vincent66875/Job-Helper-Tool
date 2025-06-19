@@ -6,3 +6,4 @@ from app.routes import jobs
 
 app = FastAPI()
 app.include_router(jobs.router)
+app.mount("/static", StaticFiles(directory="static"), name="static")

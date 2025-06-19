@@ -1,0 +1,161 @@
+/* styles.css */
+
+body {
+  font-family: Arial, sans-serif;
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 0 20px;
+  background-color: #F8EEEC;
+  color: #333;
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+}
+
+form {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+input[type="text"], select {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  flex: 1 1 150px;
+  min-width: 150px;
+}
+
+button {
+  padding: 8px 20px;
+  background-color: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #3498db;
+}
+
+hr {
+  margin: 30px 0;
+  border: none;
+  border-top: 1px solid #ccc;
+}
+
+h2 {
+  color: #34495e;
+  margin-bottom: 15px;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+li {
+  background-color: white;
+  margin-bottom: 10px;
+  padding: 12px 15px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #ddd;
+  font-weight: 500;
+  color: #2c3e50;
+}
+.job-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.job-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  background-color: #C1C7C9;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.job-info {
+  flex-grow: 1;
+  font-weight: 500;
+}
+
+.job-form {
+  display: inline;
+}
+
+.job-select {
+  padding: 4px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.job-button {
+  padding: 4px 8px;
+  margin-left: 4px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.job-button.update {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.job-button.delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.job-detail-container {
+  background-color: white;
+  padding: 20px 25px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px #ccc;
+  margin-top: 30px;
+}
+
+.job-detail-container h1 {
+  color: #2c3e50;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.job-detail-container p {
+  font-size: 1rem;
+  margin: 8px 0;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  min-height: 120px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #2980b9;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}

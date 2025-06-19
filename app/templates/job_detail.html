@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ job.title }}</title>
+    <link rel="stylesheet" href="../../static/css/styles.css">
+</head>
+<body>
+  <div class="job-detail-container">
+    <h1>{{ job.title }}</h1>
+    <p><strong>Company:</strong> {{ job.company }}</p>
+    <p><strong>Status:</strong> {{ job.status }}</p>
+
+    <form action="/jobs/update_description/{{ job.job_id }}" method="post">
+      <label for="description">Job Description:</label><br>
+      <textarea name="description">{{ job.description or "" }}</textarea><br>
+      <button type="submit">Save Description</button>
+    </form>
+
+    <a class="back-link" href="/dashboard">← Back to Dashboard</a>
+  </div>
+  <h3>Upload Resume</h3>
+    <form action="/jobs/upload_resume/{{ job.job_id }}" method="post" enctype="multipart/form-data">
+    <input type="file" name="resume" accept=".pdf,.doc,.docx" required />
+    <button type="submit">Upload</button>
+  </form>
+</body>
+
+</html>

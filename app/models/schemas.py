@@ -7,8 +7,9 @@ class Job(BaseModel):
     user_id: str
     title: str
     company: str
-    status: Literal["Applied", "Interviewing", "Offer", "Rejected"]
+    status: Literal["Applying", "Applied", "Interviewing", "Offer", "Rejected"]
     created_at: str
+    description: str
 class User(BaseModel):
     user_id: str
     name: str

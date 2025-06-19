@@ -5,31 +5,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Dashboard</title>
-    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="../../static/css/styles.css">
  </head>
  <body>
-    <h1> Job Application Tracker </h1>
-    <form action="/jobs/add" method="post">
+    <h1> Job Application Tracker! </h1>
+    <form action="/jobs" method="post">
         <input type="text" name="title" placeholder="Job Title" required />
         <input type="text" name="company" placeholder="Company" required />
         <select name="status">
+            <option value="Applying">Applying</option>
             <option value="Applied">Applied</option>
             <option value="Interviewing">Interviewing</option>
             <option value="Offer">Offer</option>
             <option value="Rejected">Rejected</option>
         </select>
+        <button type="submit">Add Job</button>
     </form>
 
     <hr/>
 
     <h2>Your Jobs</h2>
     <ul>
-        {% for job in jobs %%}
-            <li>
-                <strong>{{ job.title }}</strong> at {{ job.company }} - Status: {{ job.status }}
-            </li>
-        {% else %}
-            <li>No jobs yet. Add one above!</li>
+        {% for job in jobs %}
+        <li class="job-item">
+            <a href="/jobs/{{ job.job_id }}" class="job-info">{{ job.title }} at {{ job.company }}</a>
+            <form action="/jobs/update/{{ job.job_id }}" method="post" class="job-form">
+                <select name="status" class="job-select">
+                <option value="Applying" {% if job.status == "Rejected" %}selected{% endif %}>Applying</option>
+                <option value="Applied" {% if job.status == "Applied" %}selected{% endif %}>Applied</option>
+                <option value="Interviewing" {% if job.status == "Interviewing" %}selected{% endif %}>Interviewing</option>
+                <option value="Offer" {% if job.status == "Offer" %}selected{% endif %}>Offer</option>
+                <option value="Rejected" {% if job.status == "Rejected" %}selected{% endif %}>Rejected</option>
+                </select>
+                <button type="submit" class="job-button update">Update</button>
+            </form>
+
+            <form action="/jobs/delete/{{ job.job_id }}" method="post" class="job-form">
+                <button type="submit" class="job-button delete">Delete</button>
+            </form>
+        </li>
         {% endfor %}
     </ul>
  </body>
