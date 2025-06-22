@@ -4,18 +4,23 @@ from fastapi.responses import RedirectResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 from app.db import crud
 from app.models.schemas import Job
-import fitz
-import os
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from typing import List
 from transformers import AutoTokenizer, AutoModel
+from keybert import KeyBERT
 import torch
+import fitz
+import os
+import spacy
 
+nlp = spacy.load("en_core_web_lg")
 templates = Jinja2Templates(directory="app/templates")
 router = APIRouter()
 dummy_user_id = "user_123"
-tokenizer = AutoTokenizer.from_pretrained("sentence-transformer/all-MiniLM-L6-v2")
-model = AutoModel.from_pretrained("sentence-transformers/all-MiniLM-L6-v2")
+tokenizer = AutoTokenizer.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
+model = AutoModel.from_pretrained('sentence-transformers/all-MiniLM-L6-v2')
+kw_model = KeyBERT()
 
 @router.get("/jobs")
 def list_jobs():
@@ -44,9 +49,34 @@ async def show_dashboard(request: Request):
 @router.get("/jobs/{job_id}", response_class=HTMLResponse)
 def job_detail(job_id: str, request: Request):
     job = crud.get_job_by_id(dummy_user_id, job_id)
+    job_description = job.get("description", "")
     if not job:
         return HTMLResponse(content="Job not found", status_code=404)
-    return templates.TemplateResponse("job_detail.html", {"request": request, "job": job})
+    
+    #locate resume
+    upload_dir = "uploads"
+    resume_file = None
+    for filename in os.listdir(upload_dir):
+        if filename.startswith(job_id + "_"):
+            resume_file = os.path.join(upload_dir, filename)
+            break
+    resume_text = ""
+    missing_kw = []
+    score = None
+    print("Print out")
+    if resume_file:
+        resume_text = extract_resume_text(resume_file)
+        missing_kw = missing_keywords(job_description, resume_text)
+        score = compute_bert_similarity(job_description, resume_text).item()
+    score = f"{score * 100:.2f}%"
+
+    return templates.TemplateResponse("job_detail.html", {
+        "request": request,
+        "job": job,
+        "resume_text": resume_text,
+        "missing_keywords": missing_kw,
+        "score": score,
+    })
 
 @router.post("/jobs/update_description/{job_id}")
 def update_job_description(job_id: str, description: str = Form(...)):
@@ -62,26 +92,36 @@ async def upload_resume(job_id: str, resume: UploadFile = File(...)):
         f.write(await resume.read())
     return RedirectResponse(url=f"/jobs/{job_id}", status_code=303)
 
+#resume analysis
 def extract_resume_text(file_path: str) -> str:
     doc = fitz.open(file_path)
     text = ""
     for page in doc:
         text += page.get_text()
     return text
-# term frequency inverse Doc frequency
-def compute_similarity(text1, text2):
-    tfidf = TfidfVectorizer(stop_words='english')
-    tfidf_matrix = tfidf.fit_transform([text1, text2])
-    sim = cosine_similarity(tfidf_matrix[0:1], tfidf_matrix[0:2])
-    return sim[0][0]
+def extract_keywords(text):
+    doc = nlp(text)
+    keywords = []
+
+    for ent in doc.ents:
+        cleaned = ent.text.strip().lower()
+        if ent.label_ not in {"ORG"}:
+            keywords.append(cleaned)
+            print(f"{cleaned} ({ent.label_})")
+    return sorted(set(keywords))
+
+def missing_keywords(job_description, resume_text) -> List[str]:
+    job_keywords = extract_keywords(job_description)
+    resume_lower = resume_text.lower()
+    return [kw for kw in job_keywords if kw not in resume_lower]
+
 #convert text to embeding
 def embed(text):
-    imputs = tokenizer(text, return_tensors = "pt", padding = True, truncation = True)
+    inputs = tokenizer(text, return_tensors = "pt", padding = True, truncation = True)
     with torch.no_grad():
-        outputs = model(**input)
+        outputs = model(**inputs)
     return outputs.last_hidden_state.mean(dim=1)
 def compute_bert_similarity(text1, text2):
     embed1 = embed(text1)
     embed2 = embed(text2)
     return torch.nn.functional.cosine_similarity(embed1, embed2)
-    

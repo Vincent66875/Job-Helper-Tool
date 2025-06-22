@@ -159,3 +159,63 @@ textarea {
 .back-link:hover {
   text-decoration: underline;
 }
+
+/* Resume analysis container */
+.resume-analysis {
+  background-color: #f0f8ff;
+  border: 1px solid #a8c7e7;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+/* Preformatted resume text */
+.resume-text {
+  white-space: pre-wrap; /* wrap lines */
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #e6f0ff;
+  border: 1px solid #b0c4de;
+  padding: 15px;
+  border-radius: 5px;
+  font-family: Consolas, monospace;
+  font-size: 0.9rem;
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+/* Missing keywords list */
+.missing-keywords {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 20px;
+  color: #c0392b;
+  font-weight: 600;
+}
+
+/* Headings inside resume-analysis */
+.resume-analysis h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #34495e;
+}
+
+/* Similarity score paragraph */
+.resume-analysis p {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #27ae60;
+}
+
+/* Back link styling */
+.back-link {
+  display: inline-block;
+  margin-top: 15px;
+  color: #2980b9;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.back-link:hover {
+  text-decoration: underline;
+}

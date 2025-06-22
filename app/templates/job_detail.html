@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>{{ job.title }}</title>
-    <link rel="stylesheet" href="../../static/css/styles.css">
+    <link rel="stylesheet" href="../../static/css/styles.css" />
 </head>
 <body>
   <div class="job-detail-container">
@@ -12,18 +12,43 @@
     <p><strong>Status:</strong> {{ job.status }}</p>
 
     <form action="/jobs/update_description/{{ job.job_id }}" method="post">
-      <label for="description">Job Description:</label><br>
-      <textarea name="description">{{ job.description or "" }}</textarea><br>
+      <label for="description">Job Description:</label><br />
+      <textarea name="description" rows="6" cols="60">{{ job.description or "" }}</textarea><br />
       <button type="submit">Save Description</button>
     </form>
 
     <a class="back-link" href="/dashboard">← Back to Dashboard</a>
-  </div>
-  <h3>Upload Resume</h3>
-    <form action="/jobs/upload_resume/{{ job.job_id }}" method="post" enctype="multipart/form-data">
-    <input type="file" name="resume" accept=".pdf,.doc,.docx" required />
-    <button type="submit">Upload</button>
-  </form>
-</body>
 
+    <hr />
+
+    <h3>Upload Resume</h3>
+    <form action="/jobs/upload_resume/{{ job.job_id }}" method="post" enctype="multipart/form-data">
+      <input type="file" name="resume" accept=".pdf,.doc,.docx" required />
+      <button type="submit">Upload</button>
+    </form>
+
+    {% if resume_text %}
+    <section class="resume-analysis">
+      <h3>Extracted Resume Text</h3>
+
+
+      <h3>Missing Keywords from Resume</h3>
+      {% if missing_keywords %}
+        <ul class="missing-keywords">
+          {% for kw in missing_keywords %}
+            <li>{{ kw }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>None! Your resume covers all keywords from the job description.</p>
+      {% endif %}
+
+      <h3>Resume & Job Description Similarity</h3>
+      {% if score is not none %}
+        <p>{{ score }}</p>
+      {% endif %}
+    </section>
+    {% endif %}
+  </div>
+</body>
 </html>
